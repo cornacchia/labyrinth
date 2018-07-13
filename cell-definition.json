@@ -1,0 +1,87 @@
+{
+  "playerStartingPoints": [
+    {
+      "player": 0,
+      "position": [0, 0],
+      "exits": [0, 1, 1, 0]
+    },
+    {
+      "player": 1,
+      "position": [0, 6],
+      "exits": [0, 0, 1, 1]
+    },
+    {
+      "player": 2,
+      "position": [6, 6],
+      "exits": [1, 0, 0, 1]
+    },
+    {
+      "player": 3,
+      "position": [6, 0],
+      "exits": [1, 1, 0, 0]
+    }
+  ],
+  "fixedCells": [
+    {
+      "position": [0, 2],
+      "exits": [0, 1, 1, 1]
+    },
+    {
+      "position": [0, 4],
+      "exits": [0, 1, 1, 1]
+    },
+    {
+      "position": [2, 0],
+      "exits": [1, 1, 1, 0]
+    },
+    {
+      "position": [2, 2],
+      "exits": [1, 1, 1, 0]
+    },
+    {
+      "position": [2, 4],
+      "exits": [0, 1, 1, 1]
+    },
+    {
+      "position": [2, 6],
+      "exits": [1, 0, 1, 1]
+    },
+    {
+      "position": [4, 0],
+      "exits": [1, 1, 1, 0]
+    },
+    {
+      "position": [4, 2],
+      "exits": [1, 1, 0, 1]
+    },
+    {
+      "position": [4, 4],
+      "exits": [1, 0, 1, 1]
+    },
+    {
+      "position": [4, 6],
+      "exits": [1, 0, 1, 1]
+    },
+    {
+      "position": [6, 2],
+      "exits": [1, 1, 0, 1]
+    },
+    {
+      "position": [6, 4],
+      "exits": [1, 1, 0, 1]
+    }
+  ],
+  "threeExitsCells": 6,
+  "ninetyDegreesTreasureCells": 6,
+  "ninetyDegreesCells": 9,
+  "corridors": 13,
+  "nonFixedCells": [
+    "01", "03", "05",
+    "10", "11", "12", "13", "14", "15", "16",
+    "21", "23", "25",
+    "30", "31", "32", "33", "34", "35", "36",
+    "41", "43", "45",
+    "50", "51", "52", "53", "54", "55", "56",
+    "61", "63", "65"
+  ]
+}
