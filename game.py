@@ -16,4 +16,9 @@ class Game:
 
     while (True):
       self.view.render()
-      stdscr.getch()
+      cmd = stdscr.getch()
+      self.handleCmd(cmd)
+
+  def handleCmd(self, cmd):
+    if (cmd == ord('r')):
+      self.gameBoard.freeCell.rotate(1)
