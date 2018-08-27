@@ -4,6 +4,8 @@ class Cell:
     self.exits = exits
     self.player = player
     self.treasure = treasure
+    self.freeX = -1
+    self.freeY = 0
 
   def rotate(self, times):
     for i in range(times):

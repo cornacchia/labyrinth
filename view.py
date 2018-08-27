@@ -23,10 +23,14 @@ class View:
     self.stdscr.clear()
     self.stdscr.refresh()
 
+    # draw game board
     for i in range(len(self.board.cells)):
       for j in range(len(self.board.cells[i])):
         cell = self.board.cells[i][j]
         self.drawCell(cell, i, j)
+
+    # draw free cell
+    self.drawFreeCell(self.board.freeCell)
 
   def drawCell(self, cell, i, j):
     for k in range(len(charMap)):
@@ -55,3 +59,6 @@ class View:
             # vertical exits
             else:
               self.boardBox.addstr(y, x, '|')
+
+  def drawFreeCell(self, freeCell):
+    self.drawCell(freeCell, freeCell.freeX, freeCell.freeY)
