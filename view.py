@@ -19,7 +19,7 @@ class View:
   def setBoard(self, board):
     self.board = board
 
-  def render(self):
+  def render(self, state):
     self.stdscr.clear()
     self.stdscr.refresh()
 

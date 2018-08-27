@@ -5,6 +5,7 @@ from view import View
 class Game:
   def __init__(self, players):
     self.players = players
+    self.gameState = {'currentPlayer': 0, 'freeCellPositioning': True, 'moving': False}
 
   def start(self):
     self.gameBoard = Board(self.players)
@@ -15,10 +16,50 @@ class Game:
     self.view.setBoard(self.gameBoard)
 
     while (True):
-      self.view.render()
+      self.view.render(self.gameState)
       cmd = stdscr.getch()
       self.handleCmd(cmd)
 
   def handleCmd(self, cmd):
-    if (cmd == ord('r')):
-      self.gameBoard.freeCell.rotate(1)
+    if (self.gameState['freeCellPositioning']):
+      if (cmd == ord('r')):
+        self.gameBoard.freeCell.rotate(1)
+      elif (cmd == curses.KEY_ENTER):
+        pass
+        # insert new piece
+      else:
+        self.moveFreeCell(cmd)
+
+  def moveFreeCell(self, cmd):
+    maxX = len(self.gameBoard.cells)
+    maxY = len(self.gameBoard.cells[0])
+    if (cmd == curses.KEY_UP and self.gameBoard.freeCell.freeX > -1 and self.gameBoard.freeCell.freeX < maxX):
+      self.gameBoard.freeCell.freeX += -1
+      if (self.gameBoard.freeCell.freeX == -1):
+        self.adjustFreeCellY()
+    elif (cmd == curses.KEY_DOWN and self.gameBoard.freeCell.freeX < maxX and self.gameBoard.freeCell.freeX > -1):
+      self.gameBoard.freeCell.freeX += 1
+      if (self.gameBoard.freeCell.freeX == maxX):
+        self.adjustFreeCellY()
+    elif (cmd == curses.KEY_LEFT and self.gameBoard.freeCell.freeY > -1 and self.gameBoard.freeCell.freeY < maxY):
+      self.gameBoard.freeCell.freeY += -1
+      if (self.gameBoard.freeCell.freeY == -1):
+        self.adjustFreeCellX()
+    elif (cmd == curses.KEY_RIGHT and self.gameBoard.freeCell.freeY < maxY and self.gameBoard.freeCell.freeY > -1):
+      self.gameBoard.freeCell.freeY += 1
+      if (self.gameBoard.freeCell.freeY == maxY):
+        self.adjustFreeCellX()
+
+  def adjustFreeCellY(self):
+    maxY = len(self.gameBoard.cells[0])
+    if (self.gameBoard.freeCell.freeY == -1):
+      self.gameBoard.freeCell.freeY = 0
+    elif (self.gameBoard.freeCell.freeY == maxY):
+      self.gameBoard.freeCell.freeY = maxY - 1
+
+  def adjustFreeCellX(self):
+    maxX = len(self.gameBoard.cells)
+    if (self.gameBoard.freeCell.freeX == -1):
+      self.gameBoard.freeCell.freeX = 0
+    elif (self.gameBoard.freeCell.freeX == maxX):
+      self.gameBoard.freeCell.freeX = maxX - 1
