@@ -12,9 +12,9 @@ treasures = [
   'u', 'v', 'w', 'x'
 ]
 
-# must have a cells[][] and a out_piece
 class Board:
   def __init__(self, players):
+    # this is the cell out of the board
     self.freeCell = None
     self.players = players
     # import cells definitions
@@ -29,6 +29,7 @@ class Board:
     shuffle(self.nonFixedCells)
     self.setOtherCells()
 
+  # create empty cells list
   def createBlankCells(self):
     cells = [[] for i in range(7)]
     for cell in cells:
@@ -36,6 +37,7 @@ class Board:
         cell.append(None)
     return cells
 
+  # set cells which positions are fixed for every game
   def setFixedCells(self):
     # set player starting points
     for i in range(len(self.players)):
@@ -53,9 +55,10 @@ class Board:
       newCell = Cell(fixedCellDefinition['exits'], None, treasures[i])
       self.cells[fixedCellDefinition['position'][0]][fixedCellDefinition['position'][1]] = newCell
 
+  # set randomly scattered cells
   def setOtherCells(self):
     otherCells = []
-    treasure = 12
+    treasure = 12 # we have already positioned 12 treasures in fixed cells
     for i in range(self.cellsDefinition['ninetyDegreesTreasureCells']):
       newCell = Cell([1, 1, 0, 0], None, treasures[treasure])
       treasure += 1
