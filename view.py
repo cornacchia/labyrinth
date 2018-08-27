@@ -9,8 +9,8 @@ charMap = [
 
 class View:
   def __init__(self, stdscr):
-    self.boardStartX = 0
-    self.boardStartY = 0
+    self.boardStartX = 6
+    self.boardStartY = 6
     self.stdscr = stdscr
     self.boardBox = curses.newwin(80, 80, 0, 0)
     self.boardBox.immedok(True)
@@ -18,6 +18,15 @@ class View:
 
   def setBoard(self, board):
     self.board = board
+
+  def render(self):
+    self.stdscr.clear()
+    self.stdscr.refresh()
+
+    for i in range(len(self.board.cells)):
+      for j in range(len(self.board.cells[i])):
+        cell = self.board.cells[i][j]
+        self.drawCell(cell, i, j)
 
   def drawCell(self, cell, i, j):
     for k in range(len(charMap)):
@@ -46,12 +55,3 @@ class View:
             # vertical exits
             else:
               self.boardBox.addstr(y, x, '|')
-
-  def render(self):
-    self.stdscr.clear()
-    self.stdscr.refresh()
-
-    for i in range(len(self.board.cells)):
-      for j in range(len(self.board.cells[i])):
-        cell = self.board.cells[i][j]
-        self.drawCell(cell, i, j)
