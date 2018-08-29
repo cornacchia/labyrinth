@@ -24,9 +24,8 @@ class Game:
     if (self.gameState['freeCellPositioning']):
       if (cmd == ord('r')):
         self.gameBoard.freeCell.rotate(1)
-      elif (cmd == curses.KEY_ENTER):
-        pass
-        # insert new piece
+      elif (cmd == curses.KEY_ENTER or cmd == 10 or cmd == 13):
+        self.insertFreeCell()
       else:
         self.moveFreeCell(cmd)
 
@@ -63,3 +62,10 @@ class Game:
       self.gameBoard.freeCell.freeX = 0
     elif (self.gameBoard.freeCell.freeX == maxX):
       self.gameBoard.freeCell.freeX = maxX - 1
+
+  def insertFreeCell(self):
+    # check if the move is permitted
+    x = self.gameBoard.freeCell.freeX
+    y = self.gameBoard.freeCell.freeY
+    if ((x > 0 and (x % 2) != 0) or (y > 0 and (y % 2) != 0)):
+      self.gameBoard.insertFreeCell()
