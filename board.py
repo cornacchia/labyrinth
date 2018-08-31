@@ -42,17 +42,19 @@ class Board:
     # set player starting points
     for i in range(len(self.players)):
       playerStartingPoint = self.cellsDefinition['playerStartingPoints'][i]
-      newCell = Cell(playerStartingPoint['exits'], self.players[i], None)
+      newCell = Cell(playerStartingPoint['exits'], self.players[i], i, None)
+      self.players[i].x = playerStartingPoint['position'][0]
+      self.players[i].y = playerStartingPoint['position'][1]
       self.cells[playerStartingPoint['position'][0]][playerStartingPoint['position'][1]] = newCell
     # set other starting points
     for i in range(len(self.players), len(self.cellsDefinition['playerStartingPoints'])):
       emptyStartingPoint = self.cellsDefinition['playerStartingPoints'][i]
-      newCell = Cell(emptyStartingPoint['exits'], None, None)
+      newCell = Cell(emptyStartingPoint['exits'], None, None, None)
       self.cells[emptyStartingPoint['position'][0]][emptyStartingPoint['position'][1]] = newCell
     # set other fixed cells
     for i in range(len(self.cellsDefinition['fixedCells'])):
       fixedCellDefinition = self.cellsDefinition['fixedCells'][i]
-      newCell = Cell(fixedCellDefinition['exits'], None, treasures[i])
+      newCell = Cell(fixedCellDefinition['exits'], None, None, treasures[i])
       self.cells[fixedCellDefinition['position'][0]][fixedCellDefinition['position'][1]] = newCell
 
   # set randomly scattered cells
@@ -60,18 +62,18 @@ class Board:
     otherCells = []
     treasure = 12 # we have already positioned 12 treasures in fixed cells
     for i in range(self.cellsDefinition['ninetyDegreesTreasureCells']):
-      newCell = Cell([1, 1, 0, 0], None, treasures[treasure])
+      newCell = Cell([1, 1, 0, 0], None, None, treasures[treasure])
       treasure += 1
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['ninetyDegreesCells']):
-      newCell = Cell([1, 1, 0, 0], None, None)
+      newCell = Cell([1, 1, 0, 0], None, None, None)
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['threeExitsCells']):
-      newCell = Cell([1, 1, 1, 0], None, treasures[treasure])
+      newCell = Cell([1, 1, 1, 0], None, None, treasures[treasure])
       treasure += 1
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['corridors']):
-      newCell = Cell([1, 0, 1, 0], None, None)
+      newCell = Cell([1, 0, 1, 0], None, None, None)
       otherCells.append(newCell)
 
     shuffle(otherCells)
@@ -128,13 +130,44 @@ class Board:
       self.cells[lenY - 1][y] = cell
 
     # check that the player is not out of the board
-    if (self.freeCell.player is not None):
+    if (self.freeCell.hasPlayers):
       if (y == -1):
-        self.cells[x][0].player = self.freeCell.player
+        self.cells[x][0].players = self.freeCell.players
       elif (y == lenX):
-        self.cells[x][lenX - 1].player = self.freeCell.player
+        self.cells[x][lenX - 1].players = self.freeCell.players
       elif (x == -1):
-        self.cells[0][y].player = self.freeCell.player
+        self.cells[0][y].players = self.freeCell.players
       elif (x == lenY):
-        self.cells[lenY - 1][y].player = self.freeCell.player
-      self.freeCell.player = None
+        self.cells[lenY - 1][y].players = self.freeCell.players
+      self.freeCell.players = {0: None, 1: None, 2: None, 3: None}
+
+  def playerCanMove(self, player, direction):
+    lenX = len(self.cells)
+    lenY = len(self.cells[0])
+    if (direction == 0):
+      if (player.x > 0 and self.cells[player.x][player.y].exits[0] and self.cells[player.x - 1][player.y].exits[2]):
+        return True
+    elif (direction == 2):
+      if (player.x < lenX - 1 and self.cells[player.x][player.y].exits[2] and self.cells[player.x + 1][player.y].exits[0]):
+        return True
+    elif (direction == 1):
+      if (player.y < lenY - 1 and self.cells[player.x][player.y].exits[1] and self.cells[player.x][player.y + 1].exits[3]):
+        return True
+    elif (direction == 3):
+      if (player.y > 0 and self.cells[player.x][player.y].exits[3] and self.cells[player.x][player.y - 1].exits[1]):
+        return True
+    return False
+
+  def movePlayer(self, playerIndex, direction):
+    player = self.players[playerIndex]
+    if (self.playerCanMove(player, direction)):
+      self.cells[player.x][player.y].takePlayer(playerIndex)
+      if (direction == 0):
+        player.x = player.x - 1
+      elif (direction == 2):
+        player.x = player.x + 1
+      elif (direction == 1):
+        player.y = player.y + 1
+      elif (direction == 3):
+        player.y = player.y - 1
+      self.cells[player.x][player.y].insertPlayer(playerIndex, player)

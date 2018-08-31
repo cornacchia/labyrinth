@@ -28,6 +28,24 @@ class Game:
         self.insertFreeCell()
       else:
         self.moveFreeCell(cmd)
+    elif (self.gameState['moving']):
+      if (cmd == curses.KEY_ENTER or cmd == 10 or cmd == 13):
+        # check treasures, etc.
+        self.gameState['currentPlayer'] = (self.gameState['currentPlayer'] + 1) % len(self.players)
+        self.gameState['moving'] = False
+        self.gameState['freeCellPositioning'] = True
+      else:
+        self.movePlayer(cmd)
+
+  def movePlayer(self, cmd):
+    if (cmd == curses.KEY_UP):
+      self.gameBoard.movePlayer(self.gameState['currentPlayer'], 0)
+    elif (cmd == curses.KEY_DOWN):
+      self.gameBoard.movePlayer(self.gameState['currentPlayer'], 2)
+    elif (cmd == curses.KEY_LEFT):
+      self.gameBoard.movePlayer(self.gameState['currentPlayer'], 3)
+    elif (cmd == curses.KEY_RIGHT):
+      self.gameBoard.movePlayer(self.gameState['currentPlayer'], 1)
 
   def moveFreeCell(self, cmd):
     maxX = len(self.gameBoard.cells)
@@ -68,4 +86,6 @@ class Game:
     x = self.gameBoard.freeCell.freeX
     y = self.gameBoard.freeCell.freeY
     if ((x > 0 and (x % 2) != 0) or (y > 0 and (y % 2) != 0)):
+      self.gameState['freeCellPositioning'] = False
+      self.gameState['moving'] = True
       self.gameBoard.insertFreeCell()

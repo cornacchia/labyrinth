@@ -15,6 +15,10 @@ class View:
     self.boardBox = curses.newwin(80, 80, 0, 0)
     self.boardBox.immedok(True)
     self.boardBox.box()
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
   def setBoard(self, board):
     self.board = board
@@ -45,8 +49,16 @@ class View:
         elif charMap[k][q] == ']':
           self.boardBox.addstr(y, x, ']')
         elif charMap[k][q] == 'T':
-          if (cell.player):
-            self.boardBox.addstr(y, x, '@')
+          if (cell.players[0]):
+            self.boardBox.addstr(y, x, '@', curses.color_pair(1))
+          elif (cell.players[1]):
+            self.boardBox.addstr(y, x, '@', curses.color_pair(2))
+          elif (cell.players[2]):
+            self.boardBox.addstr(y, x, '@', curses.color_pair(3))
+          elif (cell.players[3]):
+            self.boardBox.addstr(y, x, '@', curses.color_pair(4))
+          #if (cell.players[0] or cell.players[1] or cell.players[2] or cell.players[3]):
+          #  self.boardBox.addstr(y, x, '@')
           elif (cell.treasure):
             self.boardBox.addstr(y, x, str(cell.treasure))
           else:
