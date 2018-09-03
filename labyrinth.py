@@ -1,3 +1,5 @@
+import json
+from random import shuffle
 from player import Player
 from game import Game
 
@@ -22,8 +24,15 @@ while numPlayers <= 0:
       players = []
       for i in range(numPlayers):
         players.append(Player(i))
-      game = Game(players)
-      game.start()
+      with open('treasures.json') as jsonTreasures:
+        treasures = json.load(jsonTreasures)
+        shuffle(treasures)
+        treasureIndex = 0
+        for treasure in treasures:
+          players[treasureIndex % numPlayers].treasures.append(treasure)
+          treasureIndex += 1
+        game = Game(players)
+        game.start()
   except ValueError:
     print('Cannot read number of players, please insert a valid number')
     numPlayers = 0

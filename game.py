@@ -16,7 +16,7 @@ class Game:
     self.view.setBoard(self.gameBoard)
 
     while (True):
-      self.view.render(self.gameState)
+      self.view.render(self.gameState, self.players)
       cmd = stdscr.getch()
       self.handleCmd(cmd)
 
@@ -30,7 +30,7 @@ class Game:
         self.moveFreeCell(cmd)
     elif (self.gameState['moving']):
       if (cmd == curses.KEY_ENTER or cmd == 10 or cmd == 13):
-        # check treasures, etc.
+        self.gameBoard.checkTreasures(self.gameState['currentPlayer'])
         self.gameState['currentPlayer'] = (self.gameState['currentPlayer'] + 1) % len(self.players)
         self.gameState['moving'] = False
         self.gameState['freeCellPositioning'] = True

@@ -3,15 +3,6 @@ from random import shuffle
 from random import randint
 from cell import Cell
 
-treasures = [
-  'a', 'b', 'c', 'd',
-  'e', 'f', 'g', 'h',
-  'i', 'j', 'k', 'l',
-  'm', 'n', 'o', 'p',
-  'q', 'r', 's', 't',
-  'u', 'v', 'w', 'x'
-]
-
 class Board:
   def __init__(self, players):
     # this is the cell out of the board
@@ -20,6 +11,8 @@ class Board:
     # import cells definitions
     with open('cell-definition.json') as cellsDefinition:
       self.cellsDefinition = json.load(cellsDefinition)
+    with open('treasures.json') as treasures:
+      self.treasures = json.load(treasures)
     # create empty board
     self.cells = self.createBlankCells()
     # set fixed cells
@@ -54,7 +47,7 @@ class Board:
     # set other fixed cells
     for i in range(len(self.cellsDefinition['fixedCells'])):
       fixedCellDefinition = self.cellsDefinition['fixedCells'][i]
-      newCell = Cell(fixedCellDefinition['exits'], None, None, treasures[i])
+      newCell = Cell(fixedCellDefinition['exits'], None, None, self.treasures[i])
       self.cells[fixedCellDefinition['position'][0]][fixedCellDefinition['position'][1]] = newCell
 
   # set randomly scattered cells
@@ -62,14 +55,14 @@ class Board:
     otherCells = []
     treasure = 12 # we have already positioned 12 treasures in fixed cells
     for i in range(self.cellsDefinition['ninetyDegreesTreasureCells']):
-      newCell = Cell([1, 1, 0, 0], None, None, treasures[treasure])
+      newCell = Cell([1, 1, 0, 0], None, None, self.treasures[treasure])
       treasure += 1
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['ninetyDegreesCells']):
       newCell = Cell([1, 1, 0, 0], None, None, None)
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['threeExitsCells']):
-      newCell = Cell([1, 1, 1, 0], None, None, treasures[treasure])
+      newCell = Cell([1, 1, 1, 0], None, None, self.treasures[treasure])
       treasure += 1
       otherCells.append(newCell)
     for i in range(self.cellsDefinition['corridors']):
@@ -184,3 +177,9 @@ class Board:
       elif (direction == 3):
         player.y = player.y - 1
       self.cells[player.x][player.y].insertPlayer(playerIndex, player)
+
+  def checkTreasures(self, playerIndex):
+    player = self.players[playerIndex]
+    if (self.cells[player.x][player.y].treasure == player.treasures[0]):
+      self.cells[player.x][player.y].treasure = None
+      player.treasures.pop(0)

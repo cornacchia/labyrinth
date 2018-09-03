@@ -23,7 +23,7 @@ class View:
   def setBoard(self, board):
     self.board = board
 
-  def render(self, state):
+  def render(self, state, players):
     self.stdscr.clear()
     self.stdscr.refresh()
 
@@ -33,6 +33,10 @@ class View:
       self.boardBox.addstr(1, 0, '\'r\' to rotate, ARROWS to move, ENTER to insert')
     elif (state['moving']):
       self.boardBox.addstr(1, 0, 'ARROWS to move, ENTER to position player')
+    if (len(players[state['currentPlayer']].treasures) > 0):
+      self.boardBox.addstr(2, 0, 'Current treasure: ' + players[state['currentPlayer']].treasures[0])
+    else:
+      self.boardBox.addstr(2, 0, 'Return to starting point')
 
     # draw game board
     for i in range(len(self.board.cells)):
