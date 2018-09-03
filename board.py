@@ -139,7 +139,20 @@ class Board:
         self.cells[0][y].players = self.freeCell.players
       elif (x == lenY):
         self.cells[lenY - 1][y].players = self.freeCell.players
-      self.freeCell.players = {0: None, 1: None, 2: None, 3: None}
+      self.freeCell.flushPlayers()
+
+    # adjust player positions
+    self.adjustPlayerPositions()
+
+  def adjustPlayerPositions(self):
+    for x in range(len(self.cells)):
+      for y in range(len(self.cells[x])):
+        for playerIndex in self.cells[x][y].players:
+          player = self.cells[x][y].players[playerIndex]
+          if (player is not None):
+            player.x = x
+            player.y = y
+
 
   def playerCanMove(self, player, direction):
     lenX = len(self.cells)

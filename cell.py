@@ -1,7 +1,7 @@
 class Cell:
   def __init__(self, exits, player, playerIndex, treasure):
     self.exits = exits
-    self.players = {0: None, 1: None, 2: None, 3: None}
+    self.flushPlayers()
     if (playerIndex is not None):
       self.players[playerIndex] = player
     self.treasure = treasure
@@ -14,6 +14,9 @@ class Cell:
       for j in range(len(self.exits)):
         newExits[(j + 1) % len(self.exits)] = self.exits[j]
       self.exits = newExits
+
+  def flushPlayers(self):
+    self.players = {0: None, 1: None, 2: None, 3: None}
 
   def takePlayer(self, playerIndex):
     player = self.players[playerIndex]

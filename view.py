@@ -57,8 +57,6 @@ class View:
             self.boardBox.addstr(y, x, '@', curses.color_pair(3))
           elif (cell.players[3]):
             self.boardBox.addstr(y, x, '@', curses.color_pair(4))
-          #if (cell.players[0] or cell.players[1] or cell.players[2] or cell.players[3]):
-          #  self.boardBox.addstr(y, x, '@')
           elif (cell.treasure):
             self.boardBox.addstr(y, x, str(cell.treasure))
           else:
