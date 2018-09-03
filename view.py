@@ -27,6 +27,13 @@ class View:
     self.stdscr.clear()
     self.stdscr.refresh()
 
+    # draw written info
+    self.boardBox.addstr(0, 0, 'Player ' + str(state['currentPlayer']) + '\'s turn')
+    if (state['freeCellPositioning']):
+      self.boardBox.addstr(1, 0, '\'r\' to rotate, ARROWS to move, ENTER to insert')
+    elif (state['moving']):
+      self.boardBox.addstr(1, 0, 'ARROWS to move, ENTER to position player')
+
     # draw game board
     for i in range(len(self.board.cells)):
       for j in range(len(self.board.cells[i])):
